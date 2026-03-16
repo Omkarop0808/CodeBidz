@@ -413,12 +413,4 @@ Distributed under the **MIT License**. See [LICENSE](LICENSE) for more informati
 
 ---
 
-<div align="center">
 
-**Built by [Avnish Kumar](https://github.com/theavnishkumar)**
-
-If this project helped you, consider giving it a ⭐
-
-[⬆ Back to Top](#online-auction-system)
-
-</div>
