@@ -424,7 +424,6 @@ Distributed under the **MIT License**. See [LICENSE](LICENSE) for more informati
 
 ---
 
-<div align="center">
 
 **Built by [Omkar Patil](https://github.com/Omkarop0808)**
 
