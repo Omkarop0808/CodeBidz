@@ -2,6 +2,9 @@ import { useSelector } from "react-redux";
 import { CTA } from "../components/Landing/CTA";
 import { Features } from "../components/Landing/Features";
 import { Hero } from "../components/Landing/Hero";
+import { LiveAuctions } from "../components/Landing/LiveAuctions";
+import { Testimonials } from "../components/Landing/Testimonials";
+import { Pricing } from "../components/Landing/Pricing";
 import Dashboard from "./Dashboard";
 import LoadingScreen from "../components/LoadingScreen";
 import { Auction } from "../components/Landing/Auction";
@@ -18,8 +21,11 @@ export const Landing = () => {
       {!user && (
         <>
           <Hero />
+          <LiveAuctions />
           <Auction />
           <Features />
+          <Testimonials />
+          <Pricing />
           <CTA />
         </>
       )}

@@ -21,6 +21,7 @@ import {
 import { RiAuctionLine } from "react-icons/ri";
 import { HiOutlineMenuAlt3 } from "react-icons/hi";
 import { FiTarget } from "react-icons/fi";
+import { NotificationBell } from "./NotificationBell";
 
 export const Navbar = () => {
   const dispatch = useDispatch();
@@ -117,6 +118,7 @@ export const Navbar = () => {
                 )}
                 {user && (
                   <div className="hidden md:flex items-center gap-2">
+                    <NotificationBell />
                     <NavLink
                       to="/profile"
                       className={({ isActive }) =>
@@ -356,6 +358,11 @@ const protectedNavLink = [
     icon: <FiTarget className="h-5 w-5" />,
   },
   {
+    name: "Credit Wallet",
+    link: "/wallet",
+    icon: <MdAttachMoney className="h-5 w-5" />,
+  },
+  {
     name: "Contact",
     link: "/contact",
     icon: <MdMailOutline className="h-5 w-5" />,
@@ -384,24 +391,24 @@ const adminNavLink = [
     icon: <MdOutlineDashboard className="h-5 w-5" />,
   },
   {
-    name: "Create Auction",
-    link: "/create",
-    icon: <MdOutlineCreate className="h-5 w-5" />,
+    name: "Manage Auctions",
+    link: "/admin/auctions",
+    icon: <RiAuctionLine className="h-5 w-5" />,
+  },
+  {
+    name: "Credits",
+    link: "/admin/credits",
+    icon: <MdAttachMoney className="h-5 w-5" />,
+  },
+  {
+    name: "Analytics",
+    link: "/admin/analytics",
+    icon: <MdOutlineDashboard className="h-5 w-5" />,
   },
   {
     name: "Auctions",
     link: "/auction",
     icon: <RiAuctionLine className="h-5 w-5" />,
-  },
-  {
-    name: "My Auctions",
-    link: "/myauction",
-    icon: <MdAttachMoney className="h-5 w-5" />,
-  },
-  {
-    name: "My Bids",
-    link: "/mybids",
-    icon: <FiTarget className="h-5 w-5" />,
   },
 ];
 
@@ -418,9 +425,10 @@ const getAllLinks = (userRole) => {
   if (userRole === "admin") {
     return [
       ...adminNavLink,
-      protectedNavLink[5], // Contact
-      protectedNavLink[6], // Profile
-      protectedNavLink[7], // Privacy
+      protectedNavLink[5], // Credit Wallet
+      protectedNavLink[6], // Contact
+      protectedNavLink[7], // Profile
+      protectedNavLink[8], // Privacy
     ];
   }
   return protectedNavLink; // All 8 links

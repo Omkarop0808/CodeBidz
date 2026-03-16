@@ -1,6 +1,7 @@
 import { Outlet, useNavigate } from "react-router";
 import { Navbar } from "../components/Navbar";
 import { Footer } from "../components/Footer";
+import { BottomNav } from "../components/BottomNav";
 import LoadingScreen from "../components/LoadingScreen";
 import ScrollToTop from "../utils/ScrollToTop";
 import { useSelector } from "react-redux";
@@ -18,14 +19,17 @@ export const MainLayout = () => {
 
   if (loading) return <LoadingScreen />;
 
-  if (!user) return null; // Prevents flashing protected content before redirect
+  if (!user) return null;
 
   return (
     <>
       <ScrollToTop />
       <Navbar />
-      <Outlet />
+      <div className="pb-20 lg:pb-0">
+        <Outlet />
+      </div>
       <Footer />
+      <BottomNav />
     </>
   );
 };

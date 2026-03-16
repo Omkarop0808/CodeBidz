@@ -3,6 +3,9 @@ import { Link } from "react-router";
 import LoadingScreen from "../components/LoadingScreen.jsx";
 import { useDashboardStats } from "../hooks/useAuction.js";
 import { useDocumentTitle } from "../hooks/useDocumentTitle.js";
+import { useSelector } from "react-redux";
+import { useQuery } from "@tanstack/react-query";
+import { api } from "../config/api.js";
 
 const statConfig = [
   {
@@ -73,6 +76,18 @@ const statConfig = [
 const Dashboard = () => {
   useDocumentTitle("Dashboard");
   const { data, isLoading } = useDashboardStats();
+  const { user } = useSelector((state) => state.auth);
+  const userId = user?.user?._id;
+
+  const { data: recommendations } = useQuery({
+    queryKey: ["recommendations", userId],
+    queryFn: async () => {
+      const res = await api.get(`/recommendations/${userId}`, { withCredentials: true });
+      return res.data.recommendations || [];
+    },
+    enabled: !!userId,
+    staleTime: 60000,
+  });
 
   if (isLoading) return <LoadingScreen />;
 
@@ -129,6 +144,38 @@ const Dashboard = () => {
             </div>
           ))}
         </div>
+
+        {/* AI Recommendations */}
+        {recommendations && recommendations.length > 0 && (
+          <section className="mb-10">
+            <div className="flex items-center gap-2 mb-5">
+              <span className="text-lg">✨</span>
+              <h2 className="text-lg font-semibold text-gray-900">Recommended for You</h2>
+            </div>
+            <div className="flex gap-4 overflow-x-auto pb-2 -mx-4 px-4 sm:mx-0 sm:px-0 scrollbar-hide">
+              {recommendations.map((item) => (
+                <Link
+                  key={item._id}
+                  to={`/auction/${item._id}`}
+                  className="shrink-0 w-56 bg-white rounded-2xl border border-gray-200/80 shadow-sm overflow-hidden hover:shadow-md transition-all group"
+                >
+                  <div className="h-32 bg-gradient-to-br from-gray-100 to-gray-50 overflow-hidden">
+                    {item.itemImage ? (
+                      <img src={item.itemImage} alt={item.itemName} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-gray-300 text-3xl">🖼️</div>
+                    )}
+                  </div>
+                  <div className="p-3">
+                    <p className="text-sm font-semibold text-gray-900 truncate">{item.itemName}</p>
+                    <p className="text-xs text-gray-400 mt-0.5">{item.reason || "Trending"}</p>
+                    <p className="text-sm font-bold text-indigo-600 mt-2 tabular-nums">Rs {item.currentPrice || item.startingPrice}</p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
 
         {/* All Auctions */}
         <section className="mb-12">
@@ -195,7 +242,7 @@ const Dashboard = () => {
         {/* Mobile FAB */}
         <Link
           to="/create"
-          className="sm:hidden fixed bottom-6 right-6 bg-indigo-600 text-white p-4 rounded-2xl shadow-lg shadow-indigo-200 hover:bg-indigo-700 active:scale-95 transition-all z-50"
+          className="sm:hidden fixed bottom-24 right-6 bg-indigo-600 text-white p-4 rounded-2xl shadow-lg shadow-indigo-200 hover:bg-indigo-700 active:scale-95 transition-all z-40"
         >
           <svg
             className="w-6 h-6"

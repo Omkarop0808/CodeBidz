@@ -1,5 +1,8 @@
 import getImageUrl from "../services/cloudinaryService.js";
 import Product from "../models/product.model.js";
+import User from "../models/user.model.js";
+import CreditLedger from "../models/creditLedger.model.js";
+import { createNotification } from "../services/notificationService.js";
 import mongoose from "mongoose";
 import { getIO } from "../socket/index.js";
 
@@ -188,14 +191,35 @@ export const placeBid = async (req, res) => {
         .status(400)
         .json({ message: `Bid must be at max Rs ${maxBid}` });
 
-    // Deduct credits from user
-    const bidder = await import("../models/user.model.js").then(m => m.default.findById(userId));
+    // Deduct credits from bidder
+    const bidder = await User.findById(userId);
     if (!bidder) return res.status(404).json({ message: "Bidder not found" });
     if (bidder.credits < bidAmount) {
       return res.status(400).json({ message: "Insufficient credits to place bid" });
     }
     bidder.credits -= bidAmount;
     await bidder.save();
+
+    // Log credit deduction
+    await CreditLedger.create({
+      userId,
+      type: "deducted",
+      amount: bidAmount,
+      auctionId: id,
+      reason: "Bid placed",
+    });
+
+    // Find previous highest bidder to return their credits
+    let previousHighestBidderId = null;
+    let previousHighestBidAmount = 0;
+    if (product.bids.length > 0) {
+      const sortedBids = [...product.bids].sort((a, b) => b.bidAmount - a.bidAmount);
+      const prevHighest = sortedBids[0];
+      if (prevHighest.bidder.toString() !== userId) {
+        previousHighestBidderId = prevHighest.bidder.toString();
+        previousHighestBidAmount = prevHighest.bidAmount;
+      }
+    }
 
     const updated = await Product.findOneAndUpdate(
       {
@@ -214,9 +238,40 @@ export const placeBid = async (req, res) => {
       // Refund credits if bid fails
       bidder.credits += bidAmount;
       await bidder.save();
+      // Remove the failed deduction log
+      await CreditLedger.findOneAndDelete({
+        userId,
+        auctionId: id,
+        amount: bidAmount,
+        type: "deducted",
+      }).sort({ createdAt: -1 });
       return res
         .status(409)
         .json({ message: "Bid failed — price changed. Please try again." });
+    }
+
+    // Return credits to previous highest bidder (outbid)
+    if (previousHighestBidderId) {
+      await User.findByIdAndUpdate(previousHighestBidderId, {
+        $inc: { credits: previousHighestBidAmount },
+      });
+      await CreditLedger.create({
+        userId: previousHighestBidderId,
+        type: "returned",
+        amount: previousHighestBidAmount,
+        auctionId: id,
+        reason: "Outbid — credits returned",
+      });
+
+      // Create persistent notification for outbid user
+      try {
+        await createNotification({
+          userId: previousHighestBidderId,
+          type: "outbid",
+          message: `You were outbid on "${product.itemName}". Rs ${previousHighestBidAmount} credits returned.`,
+          auctionId: id,
+        });
+      } catch (e) { /* notification creation failed, non-critical */ }
     }
 
     // Populate for the response and socket broadcast
@@ -239,6 +294,17 @@ export const placeBid = async (req, res) => {
         bidderId: userId,
         bidAmount,
       });
+
+      // Notify previous highest bidder they were outbid (targeted to their user room)
+      if (previousHighestBidderId) {
+        io.to(`user:${previousHighestBidderId}`).emit("notification:outbid", {
+          userId: previousHighestBidderId,
+          auctionId: id,
+          auctionName: populated.itemName,
+          newBidAmount: bidAmount,
+          returnedCredits: previousHighestBidAmount,
+        });
+      }
     } catch (socketErr) {
       console.error("Socket broadcast error:", socketErr.message);
     }
@@ -252,6 +318,7 @@ export const placeBid = async (req, res) => {
       .json({ message: "Error placing bid", error: error.message });
   }
 };
+
 
 export const dashboardData = async (req, res) => {
   try {

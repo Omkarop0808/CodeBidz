@@ -17,6 +17,7 @@ const Signup = () => {
     name: "",
     email: "",
     password: "",
+    role: "user", // default to user (bidder/seller)
   });
   const [isError, setIsError] = useState("");
 
@@ -91,6 +92,33 @@ const Signup = () => {
                 placeholder="John Doe"
                 required
               />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">Account Type</label>
+              <div className="flex gap-4">
+                <label className="inline-flex items-center">
+                  <input
+                    type="radio"
+                    name="role"
+                    value="user"
+                    checked={formData.role === "user"}
+                    onChange={() => setFormData({ ...formData, role: "user" })}
+                    className="form-radio text-indigo-600"
+                  />
+                  <span className="ml-2 text-sm text-gray-700">Bidder/Seller</span>
+                </label>
+                <label className="inline-flex items-center">
+                  <input
+                    type="radio"
+                    name="role"
+                    value="admin"
+                    checked={formData.role === "admin"}
+                    onChange={() => setFormData({ ...formData, role: "admin" })}
+                    className="form-radio text-indigo-600"
+                  />
+                  <span className="ml-2 text-sm text-gray-700">Admin</span>
+                </label>
+              </div>
             </div>
 
             <div>

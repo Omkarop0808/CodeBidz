@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import axios from "axios";
 import { useNavigate } from "react-router";
 import { useCreateAuction } from "../hooks/useAuction.js";
 import { useDocumentTitle } from "../hooks/useDocumentTitle.js";
@@ -17,6 +18,31 @@ export const CreateAuction = () => {
     itemEndDate: "",
     itemPhoto: "",
   });
+  const [aiLoading, setAiLoading] = useState(false);
+  // AI-powered description generator
+  const handleAIDescription = async () => {
+    if (!formData.itemName || !formData.itemCategory) {
+      setError("Enter item name and category first.");
+      return;
+    }
+    setAiLoading(true);
+    setError("");
+    try {
+      // Replace this with your real AI endpoint or OpenAI call
+      const res = await axios.post("/api/ai/generate-description", {
+        itemName: formData.itemName,
+        itemCategory: formData.itemCategory,
+      });
+      setFormData((prev) => ({
+        ...prev,
+        itemDescription: res.data.description,
+      }));
+    } catch (err) {
+      setError("AI description failed. Try again or write manually.");
+    } finally {
+      setAiLoading(false);
+    }
+  };
 
   const { mutate, isPending } = useCreateAuction({
     onSuccess: (data) => {
@@ -182,6 +208,21 @@ export const CreateAuction = () => {
                 >
                   Description
                 </label>
+                <div className="flex gap-2 mb-1">
+                  <button
+                    type="button"
+                    className={`text-xs font-semibold px-3 py-1.5 rounded-lg border border-indigo-200 bg-indigo-50 text-indigo-700 hover:bg-indigo-100 transition flex items-center gap-2 ${aiLoading ? 'opacity-60 cursor-not-allowed' : ''}`}
+                    onClick={handleAIDescription}
+                    disabled={aiLoading}
+                  >
+                    {aiLoading ? (
+                      <svg className="animate-spin h-4 w-4 text-indigo-500" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path></svg>
+                    ) : (
+                      <span>✨ Generate with AI</span>
+                    )}
+                  </button>
+                  <span className="text-xs text-gray-400 self-center">(Suggests a catchy description)</span>
+                </div>
                 <textarea
                   id="itemDescription"
                   name="itemDescription"

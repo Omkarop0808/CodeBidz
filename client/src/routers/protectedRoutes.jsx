@@ -7,6 +7,8 @@ import { MyAuction } from "../pages/MyAuction";
 import { MyBids } from "../pages/MyBids";
 import Profile from "../pages/Profile";
 import Privacy from "../pages/Privacy";
+import Dashboard from "../pages/Dashboard";
+import CreditWallet from "../pages/CreditWallet";
 
 export const protectedRoutes = [
   {
@@ -14,6 +16,11 @@ export const protectedRoutes = [
     element: <MainLayout />,
     errorElement: <Error />,
     children: [
+      {
+        index: true,
+        element: <Dashboard />,
+        errorElement: <Error />,
+      },
       {
         path: "auction",
         element: <AuctionList />,
@@ -48,6 +55,11 @@ export const protectedRoutes = [
       {
         path: "privacy",
         element: <Privacy />,
+        errorElement: <Error />,
+      },
+      {
+        path: "wallet",
+        element: <CreditWallet />,
         errorElement: <Error />,
       },
     ],

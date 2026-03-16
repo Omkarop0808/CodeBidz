@@ -33,12 +33,10 @@ export const login = createAsyncThunk(
 // signup
 export const signup = createAsyncThunk(
   "auth/signup",
-  async ({ name, email, password }, { rejectWithValue }) => {
+  async ({ name, email, password, role }, { rejectWithValue }) => {
     try {
-      await api.post(`/auth/signup`, { name, email, password });
-
+      await api.post(`/auth/signup`, { name, email, password, role });
       const response = await api.get(`/user`);
-
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.error || "Signup failed");

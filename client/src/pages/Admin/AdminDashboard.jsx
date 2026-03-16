@@ -4,6 +4,7 @@ import AuctionCard from "../../components/AuctionCard";
 import LoadingScreen from "../../components/LoadingScreen";
 import { getAdminDashboard, getAllUsers } from "../../api/admin";
 import { useDocumentTitle } from "../../hooks/useDocumentTitle";
+import { useAssignCredits } from "../../hooks/useAdmin";
 
 const statConfig = [
   {
@@ -101,7 +102,7 @@ export const AdminDashboard = () => {
   const [assigning, setAssigning] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [creditValue, setCreditValue] = useState(0);
-  const { mutate: assignCredits, isLoading: assignLoading } = require("../../hooks/useAdmin").useAssignCredits();
+  const { mutate: assignCreditsMutation, isPending: assignLoading } = useAssignCredits();
 
   const fetchDashboardData = async () => {
     try {
@@ -331,45 +332,45 @@ export const AdminDashboard = () => {
                         </td>
                       </tr>
                     ))}
-                        {/* Assign Credits Dialog */}
-                        {assigning && selectedUser && (
-                          <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
-                            <div className="bg-white rounded-xl shadow-lg p-6 w-full max-w-md">
-                              <h3 className="text-lg font-semibold mb-4">Assign Credits to {selectedUser.name}</h3>
-                              <input
-                                type="number"
-                                min="0"
-                                value={creditValue}
-                                onChange={e => setCreditValue(Number(e.target.value))}
-                                className="w-full border border-gray-300 rounded px-3 py-2 mb-4"
-                              />
-                              <div className="flex justify-end gap-2">
-                                <button
-                                  className="bg-gray-200 px-4 py-2 rounded"
-                                  onClick={() => setAssigning(false)}
-                                  disabled={assignLoading}
-                                >Cancel</button>
-                                <button
-                                  className="bg-indigo-600 text-white px-4 py-2 rounded"
-                                  disabled={assignLoading}
-                                  onClick={() => {
-                                    assignCredits({ userId: selectedUser._id, credits: creditValue }, {
-                                      onSuccess: () => {
-                                        setAssigning(false);
-                                        setSelectedUser(null);
-                                      },
-                                    });
-                                  }}
-                                >{assignLoading ? "Assigning..." : "Assign Credits"}</button>
-                              </div>
-                            </div>
-                          </div>
-                        )}
                   </tbody>
                 </table>
               </div>
             )}
           </div>
+          {/* Assign Credits Dialog — rendered outside table for valid HTML */}
+          {assigning && selectedUser && (
+            <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
+              <div className="bg-white rounded-xl shadow-lg p-6 w-full max-w-md">
+                <h3 className="text-lg font-semibold mb-4">Assign Credits to {selectedUser.name}</h3>
+                <input
+                  type="number"
+                  min="0"
+                  value={creditValue}
+                  onChange={e => setCreditValue(Number(e.target.value))}
+                  className="w-full border border-gray-300 rounded px-3 py-2 mb-4"
+                />
+                <div className="flex justify-end gap-2">
+                  <button
+                    className="bg-gray-200 px-4 py-2 rounded"
+                    onClick={() => setAssigning(false)}
+                    disabled={assignLoading}
+                  >Cancel</button>
+                  <button
+                    className="bg-indigo-600 text-white px-4 py-2 rounded"
+                    disabled={assignLoading}
+                    onClick={() => {
+                      assignCreditsMutation({ userId: selectedUser._id, credits: creditValue }, {
+                        onSuccess: () => {
+                          setAssigning(false);
+                          setSelectedUser(null);
+                        },
+                      });
+                    }}
+                  >{assignLoading ? "Assigning..." : "Assign Credits"}</button>
+                </div>
+              </div>
+            </div>
+          )}
         </section>
       </div>
     </div>

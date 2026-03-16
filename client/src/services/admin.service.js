@@ -1,3 +1,5 @@
+import { api } from "../config/api.js";
+
 // Assign credits to a user
 export const assignCredits = async (userId, credits) => {
     try {
@@ -8,7 +10,6 @@ export const assignCredits = async (userId, credits) => {
         throw error;
     }
 };
-import { api } from "../config/api.js";
 
 
 // Get admin dashboard statistics
@@ -65,16 +66,30 @@ export const deleteUser = async (userId) => {
     }
 };
 
-// Block/Unblock user (future functionality)
-export const toggleUserStatus = async (userId, status) => {
+// Block/Unblock user
+export const toggleUserStatus = async (userId) => {
     try {
         const res = await api.patch(`/admin/users/${userId}/status`,
-            { status },
+            {},
             { withCredentials: true }
         );
         return res.data;
     } catch (error) {
         console.log(error?.response?.data?.error || "Can't update user status");
+        throw error;
+    }
+};
+
+// Reset user password
+export const resetUserPassword = async (userId, newPassword) => {
+    try {
+        const res = await api.patch(`/admin/users/${userId}/reset-password`,
+            { newPassword },
+            { withCredentials: true }
+        );
+        return res.data;
+    } catch (error) {
+        console.log(error?.response?.data?.error || "Can't reset password");
         throw error;
     }
 };

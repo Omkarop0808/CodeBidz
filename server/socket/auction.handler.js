@@ -1,4 +1,7 @@
 import Product from "../models/product.model.js";
+import User from "../models/user.model.js";
+import CreditLedger from "../models/creditLedger.model.js";
+import { createNotification } from "../services/notificationService.js";
 
 // Track users in auction rooms: { auctionId: Map<socketId, { userId, userName }> }
 const auctionRooms = new Map();
@@ -7,6 +10,9 @@ export const registerAuctionHandlers = (io, socket) => {
   // Use verified identity from socket auth middleware
   const userId = socket.user.id;
   const userName = socket.user.name;
+
+  // Join user-specific room for targeted notifications
+  socket.join(`user:${userId}`);
 
   // Join auction room
   socket.on("auction:join", ({ auctionId }) => {
@@ -37,6 +43,7 @@ export const registerAuctionHandlers = (io, socket) => {
   });
 
   // Place bid via socket — uses authenticated userId, not client-supplied
+  // Includes full credit system logic (deduct, refund outbid, ledger, notifications)
   socket.on("auction:bid", async ({ auctionId, bidAmount }) => {
     try {
       if (!auctionId || bidAmount == null) return;
@@ -48,7 +55,6 @@ export const registerAuctionHandlers = (io, socket) => {
         return;
       }
 
-      // Atomic findOneAndUpdate to prevent race conditions
       const product = await Product.findById(auctionId);
       if (!product) {
         socket.emit("auction:error", { message: "Auction not found" });
@@ -87,6 +93,41 @@ export const registerAuctionHandlers = (io, socket) => {
         return;
       }
 
+      // Check and deduct credits from bidder
+      const bidder = await User.findById(userId);
+      if (!bidder) {
+        socket.emit("auction:error", { message: "Bidder not found" });
+        return;
+      }
+      if (bidder.credits < amount) {
+        socket.emit("auction:error", { message: "Insufficient credits to place bid" });
+        return;
+      }
+
+      bidder.credits -= amount;
+      await bidder.save();
+
+      // Log credit deduction
+      await CreditLedger.create({
+        userId,
+        type: "deducted",
+        amount,
+        auctionId,
+        reason: "Bid placed",
+      });
+
+      // Find previous highest bidder to return their credits
+      let previousHighestBidderId = null;
+      let previousHighestBidAmount = 0;
+      if (product.bids.length > 0) {
+        const sortedBids = [...product.bids].sort((a, b) => b.bidAmount - a.bidAmount);
+        const prevHighest = sortedBids[0];
+        if (prevHighest.bidder.toString() !== userId) {
+          previousHighestBidderId = prevHighest.bidder.toString();
+          previousHighestBidAmount = prevHighest.bidAmount;
+        }
+      }
+
       // Use findOneAndUpdate with price condition to prevent race conditions
       const updatedProduct = await Product.findOneAndUpdate(
         {
@@ -109,10 +150,53 @@ export const registerAuctionHandlers = (io, socket) => {
         .populate("bids.bidder", "name");
 
       if (!updatedProduct) {
+        // Refund credits if bid failed (race condition)
+        bidder.credits += amount;
+        await bidder.save();
+        await CreditLedger.findOneAndDelete({
+          userId,
+          auctionId,
+          amount,
+          type: "deducted",
+        }).sort({ createdAt: -1 });
+
         socket.emit("auction:error", {
           message: "Bid failed — price changed. Please try again.",
         });
         return;
+      }
+
+      // Return credits to previous highest bidder (outbid)
+      if (previousHighestBidderId) {
+        await User.findByIdAndUpdate(previousHighestBidderId, {
+          $inc: { credits: previousHighestBidAmount },
+        });
+        await CreditLedger.create({
+          userId: previousHighestBidderId,
+          type: "returned",
+          amount: previousHighestBidAmount,
+          auctionId,
+          reason: "Outbid — credits returned",
+        });
+
+        // Create persistent notification for outbid user
+        try {
+          await createNotification({
+            userId: previousHighestBidderId,
+            type: "outbid",
+            message: `You were outbid on "${product.itemName}". Rs ${previousHighestBidAmount} credits returned.`,
+            auctionId,
+          });
+        } catch (e) { /* notification creation failed, non-critical */ }
+
+        // Targeted notification to previous highest bidder
+        io.to(`user:${previousHighestBidderId}`).emit("notification:outbid", {
+          userId: previousHighestBidderId,
+          auctionId,
+          auctionName: product.itemName,
+          newBidAmount: amount,
+          returnedCredits: previousHighestBidAmount,
+        });
       }
 
       updatedProduct.bids.sort(

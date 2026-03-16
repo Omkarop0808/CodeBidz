@@ -1,22 +1,18 @@
 <div align="center">
 
-# Online Auction System
+# CodeBidz
 
 ### A full-stack real-time auction platform built with the MERN stack
 
-[![Live Demo](https://img.shields.io/badge/Live-auction.ihavetech.com-indigo?style=for-the-badge&logo=googlechrome&logoColor=white)](https://auction.ihavetech.com)
-
 ![Status](https://img.shields.io/badge/Status-Active-brightgreen?style=flat-square)
 ![License](https://img.shields.io/github/license/Omkarop0808/CodeBidz?style=flat-square)
-![PRs Welcome](https://img.shields.io/badge/PRs-Welcome-blue?style=flat-square)
 ![Issues](https://img.shields.io/github/issues/Omkarop0808/CodeBidz?style=flat-square)
-![Forks](https://img.shields.io/github/forks/Omkarop0808/CodeBidz?style=flat-square)
 ![Stars](https://img.shields.io/github/stars/Omkarop0808/CodeBidz?style=flat-square)
 ![Last Commit](https://img.shields.io/github/last-commit/Omkarop0808/CodeBidz?style=flat-square)
 
-**Create auctions · Bid in real-time · Manage everything from an admin panel**
+**Create auctions · Bid in real-time · Earn credits · AI-powered descriptions · Smart recommendations**
 
-[Live Demo](https://auction.ihavetech.com) · [Report Bug](https://github.com/Omkarop0808/CodeBidz/issues) · [Request Feature](https://github.com/Omkarop0808/CodeBidz/issues) · [Architecture](./ARCHITECTURE.md) · [Learning Guide](./LEARNING_GUIDE.md) · [Backend Docs](./server/README.md) · [Frontend Docs](./client/README.md)
+[Report Bug](https://github.com/Omkarop0808/CodeBidz/issues) · [Request Feature](https://github.com/Omkarop0808/CodeBidz/issues)
 
 </div>
 
@@ -59,35 +55,37 @@
 
 ---
 
-## Why This Project?
+## Why CodeBidz?
 
-
-Most auction system tutorials stop at basic CRUD. This project goes much further:
+Most auction systems stop at basic CRUD. CodeBidz goes much further:
 
 - **Real-time bidding** — Socket.io rooms with atomic MongoDB updates prevent race conditions
+- **Credit-based economy** — Users earn starter credits on signup, spend credits to bid, and get refunds on lost auctions
+- **AI-powered descriptions** — Auto-generate compelling auction descriptions using Gemini, Groq, or OpenAI (with smart fallback)
+- **Smart recommendations** — Trending auctions ranked by recent bid activity, with AI recommendation plug-in ready
+- **Admin analytics** — Bid activity charts, top auctions, credit flow, category performance, and leaderboards
+- **Real-time notifications** — Bell notifications for bids, wins, and auction updates with read/unread tracking
 - **Production security** — httpOnly cookies, JWT auth, XSS-safe email templates, input sanitization
-- **Smart UX** — Hover prefetching, View Transitions API, live countdown timers, auto-winner detection
-- **Deployment-ready** — CI/CD pipeline, Vercel serverless support, AWS EC2 with PM2, graceful shutdown
-
-> Bolibazaar (formerly CodeBidz) is developed and maintained by [Omkar](https://github.com/Omkarop0808) and [Yash], designed to be a real-world reference for full-stack MERN development and scalable auction platforms.
->
-> 📖 **New here?** Read the [Architecture Guide](./ARCHITECTURE.md) to understand how the system works, and the [Learning Guide](./LEARNING_GUIDE.md) to see what's implemented, why, and what you can build next.
 
 ---
 
 ## Features
 
-| Category              | Features                                                                                                                                                                       |
-| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **Authentication**    | JWT with httpOnly secure cookies · Auto-login on refresh · Role-based access (User/Admin) · Password change with validation                                                    |
-| **Auctions**          | Create with image upload (Cloudinary) · Browse with pagination · Category filtering · Live countdown timers · Auto-winner detection on expiry                                  |
-| **Real-time Bidding** | Socket.io room-based architecture · Atomic bid updates (no race conditions) · Live active user count · Instant bid broadcast to all viewers · Seller cannot bid on own auction |
-| **Dashboard**         | Personal stats (total/active auctions) · Recent auctions grid · Quick navigation to all sections                                                                               |
-| **Admin Panel**       | System-wide statistics · User management with search, sort, pagination · Recent signups tracking · Role-based route protection                                                 |
-| **Security**          | Login tracking (IP, geo-location, device, browser) · Login history per user · bcrypt password hashing · Environment variable validation at startup                             |
-| **Email**             | Contact form with Resend · Dual email (admin notification + user confirmation) · XSS-safe HTML templates                                                                       |
-| **Performance**       | React Query caching · Hover-based data prefetching · View Transitions API page animations · gzip compression · Optimized MongoDB indexes                                       |
-| **Deployment**        | GitHub Actions CI/CD → AWS EC2 · Vercel serverless support · PM2 process management · Graceful shutdown handling                                                               |
+| Category              | Features                                                                                                                                                                        |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Authentication**    | JWT with httpOnly secure cookies · Auto-login on refresh · Role-based access (User/Admin) · Password change with validation                                                     |
+| **Auctions**          | Create with image upload (Cloudinary) · Browse with pagination · Category filtering · Live countdown timers · Auto-winner detection on expiry                                   |
+| **Real-time Bidding** | Socket.io room-based architecture · Atomic bid updates (no race conditions) · Live active user count · Instant bid broadcast to all viewers · Seller cannot bid on own auction  |
+| **Credit System**     | Starter credits on signup (100 credits) · Credit wallet with balance display · Full transaction ledger · Credits deducted on bid, returned on outbid/lost · Paginated history    |
+| **AI Descriptions**   | Auto-generate auction descriptions via Gemini / Groq / OpenAI · Smart fallback to mock if no API key · Context-aware prompts with category and item name                       |
+| **Notifications**     | Real-time bell notifications · Unread count badge · Mark individual or all as read · Linked to auction items · Paginated notification feed                                      |
+| **Recommendations**   | Trending auctions by recent bid activity (30-min window) · Excludes already-bid auctions · AI-ready plug-in architecture for personalized recommendations                      |
+| **Analytics (Admin)** | Bid activity over time (hour/day/week) · Top 10 auctions by bid count · Credit flow by month · Category performance breakdown · Top 10 bidders leaderboard · Audit log ready    |
+| **Dashboard**         | Personal stats (total/active auctions) · Recent auctions grid · Quick navigation to all sections                                                                                |
+| **Admin Panel**       | System-wide statistics · User management with search, sort, pagination · Auction management · Credit management · Recent signups tracking · Role-based route protection         |
+| **Security**          | Login tracking (IP, geo-location, device, browser) · Login history per user · bcrypt password hashing · Environment variable validation at startup                              |
+| **Email**             | Contact form with Resend · Dual email (admin notification + user confirmation) · XSS-safe HTML templates                                                                        |
+| **Performance**       | React Query caching · Hover-based data prefetching · View Transitions API page animations · gzip compression · Optimized MongoDB indexes                                        |
 
 ---
 
@@ -117,10 +115,8 @@ Compression
 
 </td><td>
 
-AWS EC2  
-Vercel (frontend)  
+Vercel (frontend + backend)  
 GitHub Actions CI/CD  
-PM2  
 Cloudinary CDN
 
 </td></tr>
@@ -140,7 +136,7 @@ Cloudinary CDN
 
 ```bash
 git clone https://github.com/Omkarop0808/CodeBidz.git
-cd online-auction-system
+cd CodeBidz/online-auction-system
 
 # Install backend
 cd server && npm install
@@ -165,6 +161,16 @@ CLOUDINARY_API_SECRET=your-api-secret
 CLOUDINARY_URL=cloudinary://...
 RESEND_API_KEY=re_xxxxxxxxxxxx
 ```
+
+**Optional AI keys** (for AI-powered auction descriptions):
+
+```env
+GEMINI_API_KEY=your-gemini-key       # Google Gemini
+GROQ_API_KEY=your-groq-key           # Groq (Mixtral)
+OPENAI_API_KEY=your-openai-key       # OpenAI GPT-3.5
+```
+
+> If no AI key is set, the system uses a smart mock fallback — no external API required.
 
 **Client** (`client/.env`):
 
@@ -191,30 +197,45 @@ Open **http://localhost:5173** — you're live!
 
 ```
 online-auction-system/
-├── client/                      # React frontend (see client/README.md)
+├── client/                          # React frontend
 │   ├── src/
-│   │   ├── components/          # Reusable UI (Navbar, AuctionCard, Footer)
-│   │   ├── pages/               # Route pages (Dashboard, ViewAuction, etc.)
-│   │   ├── hooks/               # React Query hooks + Socket hook
-│   │   ├── services/            # API service layer (Axios)
-│   │   ├── store/               # Redux Toolkit (auth state)
-│   │   ├── layout/              # Layouts (Main, Admin, Open)
-│   │   └── routers/             # Route definitions
+│   │   ├── components/              # Reusable UI (Navbar, AuctionCard, NotificationBell, Footer)
+│   │   ├── pages/                   # Route pages (Dashboard, ViewAuction, CreditWallet, etc.)
+│   │   │   └── Admin/               # Admin pages (Analytics, AuctionManagement, CreditManagement)
+│   │   ├── hooks/                   # React Query hooks + Socket hook
+│   │   ├── services/                # API service layer (Axios)
+│   │   ├── store/                   # Redux Toolkit (auth state)
+│   │   ├── layout/                  # Layouts (Main, Admin, Open)
+│   │   └── routers/                 # Route definitions
 │   └── package.json
 │
-├── server/                      # Express backend (see server/README.md)
-│   ├── controllers/             # Route handlers
-│   ├── models/                  # Mongoose schemas (User, Product, Login)
-│   ├── routes/                  # REST API routes
-│   ├── socket/                  # Socket.io initialization + auction handlers
-│   ├── middleware/               # Auth + file upload middleware
-│   ├── services/                # Cloudinary integration
-│   ├── utils/                   # JWT, cookies, geo-location
-│   ├── config/                  # DB + env configuration
-│   ├── app.js                   # Express app setup
-│   └── server.js                # HTTP server + Socket.io + graceful shutdown
+├── server/                          # Express backend
+│   ├── controllers/                 # Route handlers
+│   │   ├── auction.controller.js    # Auction CRUD + bidding
+│   │   ├── auth.controller.js       # Login/signup/logout
+│   │   ├── credit.controller.js     # Credit balance & history
+│   │   ├── ai.controller.js         # AI description generation
+│   │   ├── analytics.controller.js  # Admin analytics endpoints
+│   │   ├── notification.controller.js # Notification management
+│   │   ├── recommendation.controller.js # Smart recommendations
+│   │   ├── admin.controller.js      # Admin dashboard & user management
+│   │   ├── contact.controller.js    # Contact form emails
+│   │   └── user.controller.js       # User profile & password
+│   ├── models/                      # Mongoose schemas
+│   │   ├── user.model.js            # User (with credits field)
+│   │   ├── product.model.js         # Auction/Product
+│   │   ├── creditLedger.model.js    # Credit transaction ledger
+│   │   ├── notification.model.js    # Notifications
+│   │   └── login.model.js           # Login tracking
+│   ├── routes/                      # REST API routes
+│   ├── socket/                      # Socket.io initialization + auction handlers
+│   ├── middleware/                   # Auth + file upload middleware
+│   ├── services/                    # Cloudinary integration
+│   ├── utils/                       # JWT, cookies, geo-location
+│   ├── config/                      # DB + env configuration
+│   ├── app.js                       # Express app setup
+│   └── server.js                    # HTTP server + Socket.io + graceful shutdown
 │
-├── .github/workflows/           # CI/CD pipeline
 └── README.md
 ```
 
@@ -232,9 +253,9 @@ online-auction-system/
 │  ┌──────────────┐                 ┌──────────────┐              │
 │  │ Connect      │                 │ POST /bid    │              │
 │  │ Join Room    │                 │ Atomic Update│              │
-│  │ Listen Bids  │                 │ Return Data  │              │
-│  │ Cleanup      │                 └──────┬───────┘              │
-│  └──────┬───────┘                        │                      │
+│  │ Listen Bids  │                 │ Deduct Credit│              │
+│  │ Cleanup      │                 │ Return Data  │              │
+│  └──────┬───────┘                 └──────┬───────┘              │
 │         │                                │                      │
 └─────────┼────────────────────────────────┼──────────────────────┘
           │ WebSocket                      │ HTTP
@@ -260,26 +281,22 @@ online-auction-system/
 
 **Race condition prevention**: Bids use `findOneAndUpdate` with a price condition — if two users bid simultaneously, only the first succeeds; the second gets a retry prompt.
 
-### Authentication Flow
+### Credit System Flow
 
 ```
-Login/Signup → Server sets httpOnly cookie (auth_token)
-     │
-Page Refresh → InitAuth dispatches checkAuth()
-     │              │
-     │         GET /user (cookie sent automatically)
-     │              │
-     │         Returns { user } or 401
-     │              │
-     ▼         Redux updates auth state
-App renders (protected routes check auth.user)
+New User Signup ──► 100 starter credits added ──► CreditLedger entry (type: "assigned")
+        │
+        ▼
+User Places Bid ──► Credits deducted ──► CreditLedger entry (type: "deducted")
+        │
+        ├── Outbid? ──► Credits returned ──► CreditLedger entry (type: "returned")
+        │
+        └── Wins auction? ──► Credits stay deducted ──► CreditLedger entry (type: "won")
 ```
 
 ---
 
 ## API Reference
-
-> Full backend documentation with request/response examples: **[server/README.md](./server/README.md)**
 
 ### Authentication
 
@@ -308,6 +325,45 @@ App renders (protected routes check auth.user)
 | `GET`  | `/auction/mybids`    | Auctions user has bid on   | Required |
 | `GET`  | `/auction/:id`       | Single auction detail      | Required |
 | `POST` | `/auction/:id/bid`   | Place a bid                | Required |
+
+### Credits
+
+| Method | Endpoint          | Description                    | Auth     |
+| ------ | ----------------- | ------------------------------ | -------- |
+| `GET`  | `/credit/balance` | Get user's credit balance      | Required |
+| `GET`  | `/credit/history` | Credit transaction history     | Required |
+
+### AI
+
+| Method | Endpoint           | Description                          | Auth     |
+| ------ | ------------------ | ------------------------------------ | -------- |
+| `POST` | `/ai/description`  | Generate AI auction description      | Required |
+
+### Notifications
+
+| Method  | Endpoint                    | Description                 | Auth     |
+| ------- | --------------------------- | --------------------------- | -------- |
+| `GET`   | `/notifications`            | Get user notifications      | Required |
+| `PATCH` | `/notifications/read-all`   | Mark all as read            | Required |
+| `PATCH` | `/notifications/:id/read`   | Mark one as read            | Required |
+| `GET`   | `/notifications/unread`     | Get unread count            | Required |
+
+### Recommendations
+
+| Method | Endpoint                        | Description                    | Auth     |
+| ------ | ------------------------------- | ------------------------------ | -------- |
+| `GET`  | `/recommendations/:userId`     | Get personalized recommendations | Required |
+
+### Analytics (Admin)
+
+| Method | Endpoint                      | Description                    | Auth  |
+| ------ | ----------------------------- | ------------------------------ | ----- |
+| `GET`  | `/analytics/bid-activity`     | Bid activity over time         | Admin |
+| `GET`  | `/analytics/top-auctions`     | Top 10 auctions by bid count   | Admin |
+| `GET`  | `/analytics/credit-flow`      | Credit flow by month           | Admin |
+| `GET`  | `/analytics/category-performance` | Category performance stats | Admin |
+| `GET`  | `/analytics/top-bidders`      | Top 10 bidders leaderboard     | Admin |
+| `GET`  | `/analytics/audit-log`        | Audit log (placeholder)        | Admin |
 
 ### Admin
 
@@ -347,63 +403,18 @@ Socket connections are authenticated via JWT from cookies. Users are tracked per
 ```bash
 cd client && npm run build
 # Deploy via Vercel CLI or GitHub integration
+# Set env: VITE_API, VITE_AUCTION_API pointing to backend URL
 ```
 
-### Backend → AWS EC2 (Automated)
+### Backend → Vercel (Serverless)
 
-The included GitHub Actions workflow (`.github/workflows/deploy.yml`) auto-deploys on push to `main`:
+The server includes a `vercel.json` for serverless deployment:
 
-1. **Add GitHub Secrets**: `EC2_HOST`, `EC2_USERNAME`, `EC2_SSH_KEY`, `EC2_SSH_PORT`, `EC2_PROJECT_PATH`, and all `.env` variables
-2. **EC2 Setup**: Node.js 20+, PM2 (`npm i -g pm2`), Git, SSH keys
-3. **Push to main** → workflow SSHs into EC2, pulls code, installs deps, writes `.env`, restarts PM2
-
-<details>
-<summary>Full list of required GitHub Secrets</summary>
-
-| Secret                  | Description                  |
-| ----------------------- | ---------------------------- |
-| `EC2_HOST`              | EC2 public IP                |
-| `EC2_USERNAME`          | SSH user (e.g., `ubuntu`)    |
-| `EC2_SSH_KEY`           | Private SSH key              |
-| `EC2_SSH_PORT`          | SSH port (default: 22)       |
-| `EC2_PROJECT_PATH`      | Project directory on EC2     |
-| `PORT`                  | Server port                  |
-| `ORIGIN`                | Frontend URL for CORS        |
-| `MONGO_URL`             | MongoDB connection string    |
-| `JWT_SECRET`            | JWT signing secret           |
-| `JWT_EXPIRES_IN`        | Token expiry (e.g., `7d`)    |
-| `COOKIE_DOMAIN`         | Cookie domain for production |
-| `CLOUDINARY_CLOUD_NAME` | Cloudinary cloud name        |
-| `CLOUDINARY_API_KEY`    | Cloudinary API key           |
-| `CLOUDINARY_API_SECRET` | Cloudinary API secret        |
-| `CLOUDINARY_URL`        | Cloudinary URL               |
-| `RESEND_API_KEY`        | Resend email API key         |
-
-</details>
-
----
-
-## Contributing
-
-Contributions are what make the open source community amazing. Any contributions you make are **greatly appreciated**.
-
-1. **Fork** the repository
-2. **Create** a feature branch (`git checkout -b feature/amazing-feature`)
-3. **Install** dependencies (`cd server && npm i && cd ../client && npm i`)
-4. **Make** your changes following existing code style
-5. **Commit** using [conventional commits](https://www.conventionalcommits.org/) (`git commit -m "feat: add amazing feature"`)
-6. **Push** to your branch (`git push origin feature/amazing-feature`)
-7. **Open** a Pull Request
-
-### Ideas for contribution
-
-- **Payment integration** — Stripe/Razorpay for winning bids
-- **Push notifications** — Real-time bid alerts via WebPush
-- **Advanced search** — Full-text search with filters
-- **User ratings** — Buyer/seller reputation system
-- **Email notifications** — Automated auction activity emails
-- **Testing** — Unit and integration test coverage
-- **Accessibility** — WCAG compliance improvements
+```bash
+cd server
+# Deploy via Vercel CLI or GitHub integration
+# Set all env vars: MONGO_URL, JWT_SECRET, CLOUDINARY_*, RESEND_API_KEY, ORIGIN
+```
 
 ---
 
@@ -415,10 +426,10 @@ Distributed under the **MIT License**. See [LICENSE](LICENSE) for more informati
 
 <div align="center">
 
-**Built by [Avnish Kumar](https://github.com/theavnishkumar)**
+**Built by [Omkar Patil](https://github.com/Omkarop0808)**
 
 If this project helped you, consider giving it a ⭐
 
-[⬆ Back to Top](#online-auction-system)
+[⬆ Back to Top](#codebidz)
 
 </div>

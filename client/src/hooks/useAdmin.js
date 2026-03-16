@@ -1,14 +1,3 @@
-import { assignCredits } from "../services/admin.service.js";
-export const useAssignCredits = () => {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: ({ userId, credits }) => assignCredits(userId, credits),
-    onSuccess: () => {
-      queryClient.invalidateQueries(["allUsers"]);
-      queryClient.invalidateQueries(["adminDashboard"]);
-    },
-  });
-};
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   getAdminDashboard,
@@ -16,7 +5,19 @@ import {
   updateUserRole,
   deleteUser,
   toggleUserStatus,
+  assignCredits,
 } from "../services/admin.service.js";
+
+export const useAssignCredits = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ userId, credits }) => assignCredits(userId, credits),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["allUsers"] });
+      queryClient.invalidateQueries({ queryKey: ["adminDashboard"] });
+    },
+  });
+};
 
 export const useAdminDashboard = () => {
   return useQuery({
@@ -46,8 +47,8 @@ export const useUpdateUserRole = () => {
   return useMutation({
     mutationFn: ({ userId, newRole }) => updateUserRole(userId, newRole),
     onSuccess: () => {
-      queryClient.invalidateQueries(["allUsers"]);
-      queryClient.invalidateQueries(["adminDashboard"]);
+      queryClient.invalidateQueries({ queryKey: ["allUsers"] });
+      queryClient.invalidateQueries({ queryKey: ["adminDashboard"] });
     },
   });
 };
@@ -58,8 +59,8 @@ export const useDeleteUser = () => {
   return useMutation({
     mutationFn: (userId) => deleteUser(userId),
     onSuccess: () => {
-      queryClient.invalidateQueries(["allUsers"]);
-      queryClient.invalidateQueries(["adminDashboard"]);
+      queryClient.invalidateQueries({ queryKey: ["allUsers"] });
+      queryClient.invalidateQueries({ queryKey: ["adminDashboard"] });
     },
   });
 };
@@ -70,8 +71,8 @@ export const useToggleUserStatus = () => {
   return useMutation({
     mutationFn: ({ userId, status }) => toggleUserStatus(userId, status),
     onSuccess: () => {
-      queryClient.invalidateQueries(["allUsers"]);
-      queryClient.invalidateQueries(["adminDashboard"]);
+      queryClient.invalidateQueries({ queryKey: ["allUsers"] });
+      queryClient.invalidateQueries({ queryKey: ["adminDashboard"] });
     },
   });
 };

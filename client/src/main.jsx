@@ -13,9 +13,9 @@ import { Toaster } from "react-hot-toast";
 
 const queryClient = new QueryClient();
 const router = createBrowserRouter([
+  ...openRoutes,
   ...adminRouter,
   ...protectedRoutes,
-  ...openRoutes,
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(

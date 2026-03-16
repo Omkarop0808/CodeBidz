@@ -43,6 +43,11 @@ const userSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    status: {
+      type: String,
+      enum: ["active", "suspended"],
+      default: "active",
+    },
     signupAt: {
       type: Date,
       default: Date.now,

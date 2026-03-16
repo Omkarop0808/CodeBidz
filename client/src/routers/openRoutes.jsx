@@ -44,7 +44,7 @@ export const openRoutes = [
         errorElement: <Error />,
       },
       {
-        path: "Legal",
+        path: "legal",
         errorElement: <Error />,
         children: [
           {

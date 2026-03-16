@@ -1,60 +1,90 @@
-import React from "react";
-import { FaClock, FaGavel, FaShieldAlt } from "react-icons/fa";
+import { motion } from "framer-motion";
 
 const features = [
   {
-    icon: <FaGavel className="text-xl text-indigo-600" />,
-    bg: "bg-indigo-50",
-    title: "Easy Bidding",
-    desc: "Place bids with confidence using our intuitive interface. Track your bids and get real-time updates.",
+    icon: "⚡",
+    title: "Real‑Time Bidding",
+    description: "Instant bid updates via WebSocket. See every bid the moment it happens with live leaderboard and countdown timers.",
+    gradient: "from-amber-500 to-orange-500",
   },
   {
-    icon: <FaShieldAlt className="text-xl text-emerald-600" />,
-    bg: "bg-emerald-50",
-    title: "Secure & Trusted",
-    desc: "Your transactions are protected with industry-standard security. Buy and sell with peace of mind.",
+    icon: "🛡️",
+    title: "Credit System",
+    description: "Transparent credit ledger with full audit trail. Credits deducted on bid, returned on outbid, settled on auction close.",
+    gradient: "from-emerald-500 to-teal-500",
   },
   {
-    icon: <FaClock className="text-xl text-amber-600" />,
-    bg: "bg-amber-50",
-    title: "24/7 Auctions",
-    desc: "Never miss an opportunity. Our platform runs around the clock so you can bid whenever you want.",
+    icon: "🏆",
+    title: "Winner Reveal",
+    description: "Gamified winner announcement with 3-2-1 countdown, confetti effects, and animated trophy reveal sequence.",
+    gradient: "from-violet-500 to-purple-500",
+  },
+  {
+    icon: "🔔",
+    title: "Smart Notifications",
+    description: "Real-time notifications for outbids, auction endings, and credit updates. Never miss an opportunity.",
+    gradient: "from-sky-500 to-blue-500",
+  },
+  {
+    icon: "📊",
+    title: "Analytics Dashboard",
+    description: "Admin analytics with KPI cards, category breakdowns, bid velocity tracking, and conversion rate monitoring.",
+    gradient: "from-rose-500 to-pink-500",
+  },
+  {
+    icon: "🔐",
+    title: "Secure Platform",
+    description: "JWT authentication with HTTP-only cookies, role-based access control, and encrypted data transmission.",
+    gradient: "from-indigo-500 to-violet-500",
   },
 ];
 
 export const Features = () => {
   return (
-    <section className="py-20 sm:py-24">
-      <div className="max-w-6xl mx-auto px-4">
-        <div className="text-center mb-14">
-          <p className="text-indigo-600 font-semibold text-sm uppercase tracking-wider mb-2">
-            Why us
+    <section className="py-24 bg-white relative">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-center mb-16"
+        >
+          <p className="text-sm font-semibold text-indigo-600 tracking-wide uppercase mb-3">
+            Features
           </p>
-          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
-            Built for Buyers & Sellers
+          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900">
+            Everything you need to{" "}
+            <span className="bg-gradient-to-r from-indigo-600 to-violet-600 bg-clip-text text-transparent">
+              win big
+            </span>
           </h2>
-          <p className="text-gray-500 max-w-lg mx-auto">
-            Everything you need for a seamless auction experience, all in one
-            place.
+          <p className="mt-4 text-gray-500 max-w-lg mx-auto">
+            A feature-rich auction platform built for speed, transparency, and the thrill of competition.
           </p>
-        </div>
+        </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {features.map((f) => (
-            <div
-              key={f.title}
-              className="relative bg-white rounded-2xl border border-gray-200/80 p-7 shadow-sm hover:shadow-md hover:border-gray-300/80 transition-all group"
+        {/* Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {features.map((feature, i) => (
+            <motion.div
+              key={feature.title}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.1 }}
+              className="group relative bg-white rounded-2xl border border-gray-200/80 p-7 hover:border-indigo-200 hover:shadow-lg hover:shadow-indigo-100/50 transition-all duration-300"
             >
-              <div
-                className={`${f.bg} w-11 h-11 rounded-xl flex items-center justify-center mb-5`}
-              >
-                {f.icon}
+              <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${feature.gradient} flex items-center justify-center text-xl mb-5 group-hover:scale-110 transition-transform duration-300`}>
+                {feature.icon}
               </div>
               <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                {f.title}
+                {feature.title}
               </h3>
-              <p className="text-gray-500 text-sm leading-relaxed">{f.desc}</p>
-            </div>
+              <p className="text-sm text-gray-500 leading-relaxed">
+                {feature.description}
+              </p>
+            </motion.div>
           ))}
         </div>
       </div>

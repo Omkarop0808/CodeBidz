@@ -4,6 +4,8 @@ import { useSelector } from "react-redux";
 import { useViewAuction, usePlaceBid } from "../hooks/useAuction.js";
 import { useSocket } from "../hooks/useSocket.js";
 import LoadingScreen from "../components/LoadingScreen.jsx";
+import Leaderboard from "../components/auction/Leaderboard.jsx";
+import WinnerReveal from "../components/auction/WinnerReveal.jsx";
 import toast from "react-hot-toast";
 import { useDocumentTitle } from "../hooks/useDocumentTitle.js";
 
@@ -12,8 +14,10 @@ export const ViewAuction = () => {
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
   const currentUserId = user?.user?._id;
+  const userCredits = user?.user?.credits ?? 0;
   const inputRef = useRef();
   const [bidding, setBidding] = useState(false);
+  const [showWinnerReveal, setShowWinnerReveal] = useState(false);
   const [countdown, setCountdown] = useState({
     days: 0,
     hours: 0,
@@ -31,6 +35,11 @@ export const ViewAuction = () => {
   const data = liveAuction || fetchedData;
   useDocumentTitle(data?.itemName ? data.itemName : "Auction Details");
 
+  // Derived state computed before hooks to satisfy Rules of Hooks
+  const timeLeft = data ? Math.max(0, new Date(data.itemEndDate) - new Date()) : 0;
+  const isActive = timeLeft > 0;
+  const winnerData = data?.winner || null;
+
   // Live countdown timer — must be called before any early return to satisfy Rules of Hooks
   useEffect(() => {
     if (!data?.itemEndDate) return;
@@ -47,6 +56,18 @@ export const ViewAuction = () => {
     const interval = setInterval(updateCountdown, 1000);
     return () => clearInterval(interval);
   }, [data?.itemEndDate]);
+
+  // Show winner reveal when auction ends and has a winner — called before early return
+  useEffect(() => {
+    if (!isActive && winnerData && !showWinnerReveal) {
+      // Check if user hasn't already seen it (via sessionStorage)
+      const revealKey = `winner_reveal_${id}`;
+      if (!sessionStorage.getItem(revealKey)) {
+        setShowWinnerReveal(true);
+        sessionStorage.setItem(revealKey, "true");
+      }
+    }
+  }, [isActive, winnerData, id, showWinnerReveal]);
 
   if (isLoading || !data) return <LoadingScreen />;
 
@@ -68,10 +89,7 @@ export const ViewAuction = () => {
     }
   };
 
-  const timeLeft = Math.max(0, new Date(data.itemEndDate) - new Date());
-  const isActive = timeLeft > 0;
   const isSeller = data.seller._id === currentUserId;
-  const winnerData = data.winner;
 
   const otherUsers = activeUsers.filter((u) => u.userId !== currentUserId);
 
@@ -90,7 +108,7 @@ export const ViewAuction = () => {
     return avatarColors[hash % avatarColors.length];
   };
 
-  const BidHistoryList = () =>
+  const bidHistoryContent =
     data.bids.length === 0 ? (
       <div className="py-10 text-center">
         <p className="text-gray-400 text-sm">No bids yet</p>
@@ -139,11 +157,24 @@ export const ViewAuction = () => {
 
   return (
     <div className="min-h-screen bg-gray-50/80">
+      {/* Winner Reveal Overlay */}
+      {showWinnerReveal && winnerData && (
+        <WinnerReveal
+          winner={winnerData}
+          currentPrice={data.currentPrice}
+          currentUserId={currentUserId}
+          bids={data.bids}
+          onClose={() => setShowWinnerReveal(false)}
+        />
+      )}
       {/* Credits Balance Info */}
       <div className="max-w-2xl mx-auto mt-6 mb-4 bg-indigo-50 border border-indigo-200 rounded-xl p-4 flex items-center gap-4">
         <span className="text-lg font-semibold text-indigo-700">Your Credits:</span>
         <span className="text-2xl font-bold text-indigo-900">{userCredits}</span>
-        <span className="ml-auto text-xs text-gray-500">Credits are deducted when you place a bid. Non-winning bids are returned after auction ends.</span>
+        <span className="ml-auto flex items-center gap-3">
+          <span className="text-xs text-gray-500 hidden sm:inline">Deducted on bid, returned if outbid.</span>
+          <a href="/wallet" className="text-xs font-semibold text-indigo-600 hover:text-indigo-800 transition whitespace-nowrap">View Wallet →</a>
+        </span>
       </div>
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-10">
         {/* Back Button */}
@@ -214,7 +245,12 @@ export const ViewAuction = () => {
                 <h3 className="text-sm font-semibold text-gray-700 mb-4">
                   Bid History
                 </h3>
-                <BidHistoryList />
+                {bidHistoryContent}
+              </div>
+
+              {/* Leaderboard — Desktop */}
+              <div className="hidden lg:block">
+                <Leaderboard bids={data.bids} currentUserId={currentUserId} activeUsers={activeUsers} />
               </div>
             </div>
           </div>
@@ -364,6 +400,12 @@ export const ViewAuction = () => {
                     🎉 Congratulations! You won this auction!
                   </div>
                 )}
+                <button
+                  onClick={() => setShowWinnerReveal(true)}
+                  className="mt-3 text-sm font-medium text-indigo-600 hover:text-indigo-700 transition"
+                >
+                  Replay Winner Reveal →
+                </button>
               </div>
             )}
 
@@ -484,7 +526,7 @@ export const ViewAuction = () => {
           <h3 className="text-sm font-semibold text-gray-700 mb-4">
             Bid History
           </h3>
-          <BidHistoryList />
+          {bidHistoryContent}
         </div>
       </div>
     </div>

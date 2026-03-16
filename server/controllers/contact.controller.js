@@ -44,9 +44,9 @@ export const handleSendMessage = async (req, res) => {
         html: adminEmailTemplate(safeName, safeEmail, safeSubject, safeMessage),
       },
       {
-        from: `Avnish Kumar <hi@ihavetech.com>`,
+        from: `CodeBidz Team <noreply@ihavetech.com>`,
         to: email,
-        subject: `Reply from Avnish Kumar`,
+        subject: `Reply from CodeBidz Team`,
         html: userEmailTemplate(safeName, safeEmail, safeSubject, safeMessage),
       },
     ]);
@@ -116,7 +116,7 @@ const userEmailTemplate = (name, email, subject, message) => `
         </p>
 
         <div class="footer">
-          &copy; 2025 Online Auction (Avnish Kumar). All rights reserved. <br />
+          &copy; 2025 CodeBidz. All rights reserved. <br />
           This is an automated confirmation. Please do not reply.
         </div>
       </div>

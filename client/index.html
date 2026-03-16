@@ -2,9 +2,8 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <!-- <link rel="icon" type="image/svg+xml" href="/vite.svg" /> -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Online Auction - Real-time Bidding Platform</title>
+    <title>CodeBidz - Real-time Auction Platform</title>
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -14,83 +13,59 @@
       rel="stylesheet"
     />
 
-    <!-- Canonical URL -->
-    <link rel="canonical" href="https://auction.ihavetech.com" />
-
     <!-- Theme Color -->
     <meta name="theme-color" content="#4f46e5" />
+    <link rel="manifest" href="/manifest.json" />
 
     <!-- SEO Meta Tags -->
     <meta
       name="description"
-      content="Online Auction System is a real-time bidding platform built using the MERN stack. Created as a major project by Avnish Kumar, it allows users to bid and win products online."
+      content="CodeBidz is a real-time auction platform built with the MERN stack. Create auctions, bid in real-time, earn credits, and win products online."
     />
     <meta
       name="keywords"
-      content="online auction system, project by Avnish Kumar, GitHub project, MERN stack project, major project, minor project, online bidding platform, real-time auction system, computer science final year project, buy and sell system, react node project"
+      content="CodeBidz, online auction, real-time bidding, MERN stack, auction platform, credit system, AI auction descriptions"
     />
-    <meta name="author" content="Avnish Kumar" />
+    <meta name="author" content="Omkar Patil" />
     <meta name="robots" content="index, follow" />
 
     <!-- Open Graph for Social Sharing -->
     <meta
       property="og:title"
-      content="Online Auction System - MERN Project by Avnish Kumar"
+      content="CodeBidz - Real-time Auction Platform"
     />
     <meta
       property="og:description"
-      content="A major MERN stack project that allows users to bid on items in real-time. Developed by Avnish Kumar."
-    />
-    <meta
-      property="og:image"
-      content="https://raw.githubusercontent.com/theavnishkumar/online-auction-system/main/screenshots/landingpage.png"
+      content="A full-stack real-time auction platform with credit system, AI-powered descriptions, analytics, and smart recommendations."
     />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:url" content="https://auction.ihavetech.com" />
     <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="Online Auction" />
+    <meta property="og:site_name" content="CodeBidz" />
     <meta property="og:locale" content="en_US" />
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta
       name="twitter:title"
-      content="Online Auction System - MERN Stack Project"
+      content="CodeBidz - Real-time Auction Platform"
     />
     <meta
       name="twitter:description"
-      content="An online bidding project created by Avnish Kumar using MongoDB, Express, React, and Node. Great for major or minor project submission."
+      content="A full-stack real-time auction platform with credit system, AI-powered descriptions, and smart recommendations."
     />
-    <meta
-      name="twitter:image"
-      content="https://raw.githubusercontent.com/theavnishkumar/online-auction-system/main/screenshots/landingpage.png"
-    />
-
-    <!-- AdSense script -->
-    <script
-      async
-      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9347518247329906"
-      crossorigin="anonymous"
-    ></script>
 
     <!-- Structured Data (JSON-LD) -->
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
         "@type": "WebSite",
-        "name": "Online Auction",
-        "url": "https://auction.ihavetech.com",
-        "description": "Real-time online bidding platform built with the MERN stack. Create auctions, place bids, and win items.",
+        "name": "CodeBidz",
+        "description": "Real-time online bidding platform built with the MERN stack. Create auctions, place bids, earn credits, and win items.",
         "author": {
           "@type": "Person",
-          "name": "Avnish Kumar",
-          "url": "https://github.com/theavnishkumar"
-        },
-        "potentialAction": {
-          "@type": "SearchAction",
-          "target": "https://auction.ihavetech.com/auction?q={search_term_string}",
-          "query-input": "required name=search_term_string"
+          "name": "Omkar Patil",
+          "url": "https://github.com/Omkarop0808"
         }
       }
     </script>
@@ -98,5 +73,12 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js').catch(() => {});
+        });
+      }
+    </script>
   </body>
 </html>

@@ -1,5 +1,6 @@
 import User from "../models/user.model.js";
 import Login from "../models/login.model.js";
+import CreditLedger from "../models/creditLedger.model.js";
 import bcrypt from "bcrypt";
 import { generateToken } from "../utils/jwt.js";
 import { getClientIp, getLocationFromIp } from "../utils/geoDetails.js";
@@ -20,6 +21,11 @@ export const handleUserLogin = async (req, res) => {
     const psswordValidate = await bcrypt.compare(password, user.password);
     if (!psswordValidate) {
       return res.status(401).json({ error: "Invalid email or password" });
+    }
+
+    // Check if user is suspended
+    if (user.status === "suspended") {
+      return res.status(403).json({ error: "Your account has been suspended. Contact admin." });
     }
 
     // generating jwt token
@@ -59,7 +65,7 @@ export const handleUserLogin = async (req, res) => {
 };
 
 export const handleUserSignup = async (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, role } = req.body;
 
   // Checking input fields
   if (!name || !email || !password) {
@@ -88,11 +94,15 @@ export const handleUserSignup = async (req, res) => {
     // Hashing user password
     const hashedPassword = await bcrypt.hash(password, 10);
 
+
     // Saving user to database
+    const STARTER_CREDITS = 100;
     const newUser = new User({
       name,
       email,
       password: hashedPassword,
+      credits: STARTER_CREDITS,
+      role: role === "admin" ? "admin" : "user",
       ipAddress: ip,
       userAgent,
       location,
@@ -100,6 +110,14 @@ export const handleUserSignup = async (req, res) => {
       lastLogin: new Date(),
     });
     await newUser.save();
+
+    // Log starter credits to ledger
+    await CreditLedger.create({
+      userId: newUser._id,
+      type: "assigned",
+      amount: STARTER_CREDITS,
+      reason: "Welcome bonus — starter credits on signup",
+    });
 
     const login = new Login({
       userId: newUser._id,
