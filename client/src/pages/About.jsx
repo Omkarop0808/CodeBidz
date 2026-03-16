@@ -69,39 +69,37 @@ export const About = () => {
 
             <section>
               <h2 className="text-xl font-semibold text-gray-900 mb-4">
-                Developer
+                Developers
               </h2>
               <p>
-                This project has been created by <strong>Avnish Kumar</strong>{" "}
-                as a demonstration of modern web development techniques and to
-                help fellow students in their academic journey.
+                Bolibazaar is developed and maintained by <strong>Omkar</strong> and <strong>Yash</strong>, passionate full-stack developers dedicated to building modern, scalable web applications for real-world use.
               </p>
 
               <div className="mt-4 p-4 bg-gray-50 rounded-sm">
                 <p className="font-medium text-gray-900 mb-2">
-                  Connect with the Developer:
+                  Connect with the Developers:
                 </p>
                 <div className="space-y-2">
                   <p>
                     <span className="font-medium">GitHub Profile:</span>{" "}
                     <a
-                      href="https://github.com/theavnishkumar"
+                      href="https://github.com/Omkarop0808"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-blue-600 hover:text-blue-800 underline"
                     >
-                      github.com/theavnishkumar
+                      github.com/Omkarop0808
                     </a>
                   </p>
                   <p>
                     <span className="font-medium">Project Repository:</span>{" "}
                     <a
-                      href="https://github.com/theavnishkumar/online-auction-system"
+                      href="https://github.com/Omkarop0808/CodeBidz"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-blue-600 hover:text-blue-800 underline"
                     >
-                      github.com/theavnishkumar/online-auction-system
+                      github.com/Omkarop0808/CodeBidz
                     </a>
                   </p>
                 </div>

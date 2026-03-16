@@ -7,16 +7,16 @@
 [![Live Demo](https://img.shields.io/badge/Live-auction.ihavetech.com-indigo?style=for-the-badge&logo=googlechrome&logoColor=white)](https://auction.ihavetech.com)
 
 ![Status](https://img.shields.io/badge/Status-Active-brightgreen?style=flat-square)
-![License](https://img.shields.io/github/license/theavnishkumar/online-auction-system?style=flat-square)
+![License](https://img.shields.io/github/license/Omkarop0808/CodeBidz?style=flat-square)
 ![PRs Welcome](https://img.shields.io/badge/PRs-Welcome-blue?style=flat-square)
-![Issues](https://img.shields.io/github/issues/theavnishkumar/online-auction-system?style=flat-square)
-![Forks](https://img.shields.io/github/forks/theavnishkumar/online-auction-system?style=flat-square)
-![Stars](https://img.shields.io/github/stars/theavnishkumar/online-auction-system?style=flat-square)
-![Last Commit](https://img.shields.io/github/last-commit/theavnishkumar/online-auction-system?style=flat-square)
+![Issues](https://img.shields.io/github/issues/Omkarop0808/CodeBidz?style=flat-square)
+![Forks](https://img.shields.io/github/forks/Omkarop0808/CodeBidz?style=flat-square)
+![Stars](https://img.shields.io/github/stars/Omkarop0808/CodeBidz?style=flat-square)
+![Last Commit](https://img.shields.io/github/last-commit/Omkarop0808/CodeBidz?style=flat-square)
 
 **Create auctions · Bid in real-time · Manage everything from an admin panel**
 
-[Live Demo](https://auction.ihavetech.com) · [Report Bug](https://github.com/theavnishkumar/online-auction-system/issues) · [Request Feature](https://github.com/theavnishkumar/online-auction-system/issues) · [Architecture](./ARCHITECTURE.md) · [Learning Guide](./LEARNING_GUIDE.md) · [Backend Docs](./server/README.md) · [Frontend Docs](./client/README.md)
+[Live Demo](https://auction.ihavetech.com) · [Report Bug](https://github.com/Omkarop0808/CodeBidz/issues) · [Request Feature](https://github.com/Omkarop0808/CodeBidz/issues) · [Architecture](./ARCHITECTURE.md) · [Learning Guide](./LEARNING_GUIDE.md) · [Backend Docs](./server/README.md) · [Frontend Docs](./client/README.md)
 
 </div>
 
@@ -61,6 +61,7 @@
 
 ## Why This Project?
 
+
 Most auction system tutorials stop at basic CRUD. This project goes much further:
 
 - **Real-time bidding** — Socket.io rooms with atomic MongoDB updates prevent race conditions
@@ -68,7 +69,7 @@ Most auction system tutorials stop at basic CRUD. This project goes much further
 - **Smart UX** — Hover prefetching, View Transitions API, live countdown timers, auto-winner detection
 - **Deployment-ready** — CI/CD pipeline, Vercel serverless support, AWS EC2 with PM2, graceful shutdown
 
-> Built as a **Major Project for Computer Science Engineering** by [Avnish Kumar](https://github.com/theavnishkumar), designed to be a real-world reference for full-stack MERN development.
+> Bolibazaar (formerly CodeBidz) is developed and maintained by [Omkar](https://github.com/Omkarop0808) and [Yash], designed to be a real-world reference for full-stack MERN development and scalable auction platforms.
 >
 > 📖 **New here?** Read the [Architecture Guide](./ARCHITECTURE.md) to understand how the system works, and the [Learning Guide](./LEARNING_GUIDE.md) to see what's implemented, why, and what you can build next.
 
@@ -138,7 +139,7 @@ Cloudinary CDN
 ### 1. Clone & Install
 
 ```bash
-git clone https://github.com/theavnishkumar/online-auction-system.git
+git clone https://github.com/Omkarop0808/CodeBidz.git
 cd online-auction-system
 
 # Install backend
