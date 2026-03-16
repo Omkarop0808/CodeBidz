@@ -1,3 +1,14 @@
+import { assignCredits } from "../services/admin.service.js";
+export const useAssignCredits = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ userId, credits }) => assignCredits(userId, credits),
+    onSuccess: () => {
+      queryClient.invalidateQueries(["allUsers"]);
+      queryClient.invalidateQueries(["adminDashboard"]);
+    },
+  });
+};
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   getAdminDashboard,

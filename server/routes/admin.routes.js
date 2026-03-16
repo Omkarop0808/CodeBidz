@@ -11,4 +11,7 @@ adminRoutes.use(secureRoute);
 adminRoutes.get("/dashboard", checkAdmin, getAdminDashboard);
 adminRoutes.get("/users", checkAdmin, getAllUsers);
 
+import { assignCredits } from "../controllers/admin.controller.js";
+adminRoutes.post("/assign-credits", checkAdmin, assignCredits);
+
 export default adminRoutes;

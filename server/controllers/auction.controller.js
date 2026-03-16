@@ -157,7 +157,7 @@ export const auctionById = async (req, res) => {
 export const placeBid = async (req, res) => {
   try {
     const bidAmount = Number(req.body.bidAmount);
-    const user = req.user.id;
+    const userId = req.user.id;
     const { id } = req.params;
 
     if (isNaN(bidAmount)) {
@@ -168,7 +168,7 @@ export const placeBid = async (req, res) => {
     if (!product) return res.status(404).json({ message: "Auction not found" });
 
     // Prevent seller from bidding on their own auction
-    if (product.seller.toString() === user) {
+    if (product.seller.toString() === userId) {
       return res
         .status(403)
         .json({ message: "You cannot bid on your own auction" });
@@ -188,6 +188,15 @@ export const placeBid = async (req, res) => {
         .status(400)
         .json({ message: `Bid must be at max Rs ${maxBid}` });
 
+    // Deduct credits from user
+    const bidder = await import("../models/user.model.js").then(m => m.default.findById(userId));
+    if (!bidder) return res.status(404).json({ message: "Bidder not found" });
+    if (bidder.credits < bidAmount) {
+      return res.status(400).json({ message: "Insufficient credits to place bid" });
+    }
+    bidder.credits -= bidAmount;
+    await bidder.save();
+
     const updated = await Product.findOneAndUpdate(
       {
         _id: id,
@@ -196,12 +205,15 @@ export const placeBid = async (req, res) => {
       },
       {
         $set: { currentPrice: bidAmount },
-        $push: { bids: { bidder: user, bidAmount } },
+        $push: { bids: { bidder: userId, bidAmount } },
       },
       { new: true },
     );
 
     if (!updated) {
+      // Refund credits if bid fails
+      bidder.credits += bidAmount;
+      await bidder.save();
       return res
         .status(409)
         .json({ message: "Bid failed — price changed. Please try again." });
@@ -218,13 +230,13 @@ export const placeBid = async (req, res) => {
     try {
       const io = getIO();
       const bidderName =
-        populated.bids.find((b) => b.bidder?._id?.toString() === user)?.bidder
+        populated.bids.find((b) => b.bidder?._id?.toString() === userId)?.bidder
           ?.name || "Someone";
 
       io.to(id).emit("auction:bidPlaced", {
         auction: populated,
         bidderName,
-        bidderId: user,
+        bidderId: userId,
         bidAmount,
       });
     } catch (socketErr) {

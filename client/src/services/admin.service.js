@@ -1,3 +1,13 @@
+// Assign credits to a user
+export const assignCredits = async (userId, credits) => {
+    try {
+        const res = await api.post(`/admin/assign-credits`, { userId, credits }, { withCredentials: true });
+        return res.data;
+    } catch (error) {
+        console.log(error?.response?.data?.error || "Can't assign credits");
+        throw error;
+    }
+};
 import { api } from "../config/api.js";
 
 

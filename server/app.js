@@ -9,7 +9,12 @@ import {
   auctionRoutes,
   contactRoutes,
   adminRoutes,
+  aiRoutes,
 } from "./routes/index.js";
+import creditRoutes from "./routes/credit.routes.js";
+import notificationRoutes from "./routes/notification.routes.js";
+import analyticsRoutes from "./routes/analytics.routes.js";
+import recommendationRoutes from "./routes/recommendation.routes.js";
 import { connectDB } from "./config/db.config.js";
 
 export const app = express();
@@ -33,10 +38,16 @@ if (process.env.VERCEL) {
   });
 }
 
+
 app.use("/auth", authRoutes);
 app.use("/user", userRoutes);
 app.use("/auction", auctionRoutes);
 app.use("/contact", contactRoutes);
 app.use("/admin", adminRoutes);
+app.use("/ai", aiRoutes);
+app.use("/credits", creditRoutes);
+app.use("/notifications", notificationRoutes);
+app.use("/analytics", analyticsRoutes);
+app.use("/recommendations", recommendationRoutes);
 
 export default app; // Exporting default app for serverless deployment

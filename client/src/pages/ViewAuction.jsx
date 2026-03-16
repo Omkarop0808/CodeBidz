@@ -139,6 +139,12 @@ export const ViewAuction = () => {
 
   return (
     <div className="min-h-screen bg-gray-50/80">
+      {/* Credits Balance Info */}
+      <div className="max-w-2xl mx-auto mt-6 mb-4 bg-indigo-50 border border-indigo-200 rounded-xl p-4 flex items-center gap-4">
+        <span className="text-lg font-semibold text-indigo-700">Your Credits:</span>
+        <span className="text-2xl font-bold text-indigo-900">{userCredits}</span>
+        <span className="ml-auto text-xs text-gray-500">Credits are deducted when you place a bid. Non-winning bids are returned after auction ends.</span>
+      </div>
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-10">
         {/* Back Button */}
         <button

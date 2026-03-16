@@ -105,11 +105,19 @@ export default function Profile() {
             <div className="px-4 py-5 sm:px-6 border-b border-gray-200">
               <div className="flex flex-col sm:flex-row items-center">
                 <div className="relative mb-4 sm:mb-0">
-                  <img
-                    src={user.user.avatar}
-                    alt="User avatar"
-                    className="h-20 w-20 rounded-full bg-gray-200 mx-auto sm:mx-0"
-                  />
+                  <div className="h-20 w-20 rounded-full bg-indigo-100 flex items-center justify-center mx-auto sm:mx-0">
+                    {user.user.avatar ? (
+                      <img
+                        src={user.user.avatar}
+                        alt="User avatar"
+                        className="h-full w-full rounded-full object-cover"
+                      />
+                    ) : (
+                      <span className="text-2xl font-bold text-indigo-600">
+                        {user.user.name?.charAt(0)?.toUpperCase()}
+                      </span>
+                    )}
+                  </div>
                   <button className="absolute bottom-0 right-0 sm:right-0 bg-white rounded-full p-1 border border-gray-300 shadow-sm">
                     <CiCamera className="h-4 w-4 text-gray-500" />
                   </button>
@@ -119,6 +127,9 @@ export default function Profile() {
                     {user.user.name}
                   </h2>
                   <p className="text-sm text-gray-500">{user.user.email}</p>
+                  <p className="text-sm text-indigo-600 mt-2 font-semibold">
+                    Credits Balance: {typeof user.user.credits === "number" ? user.user.credits : 0}
+                  </p>
                 </div>
               </div>
             </div>

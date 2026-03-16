@@ -123,6 +123,7 @@ export const registerAuctionHandlers = (io, socket) => {
       io.to(auctionId).emit("auction:bidPlaced", {
         auction: updatedProduct,
         bidderName: userName,
+        bidderId: userId,
         bidAmount: amount,
         message: `${userName} placed a bid of Rs ${amount}`,
       });

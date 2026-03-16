@@ -39,6 +39,10 @@ const userSchema = new mongoose.Schema(
       city: { type: String },
       isp: { type: String },
     },
+    credits: {
+      type: Number,
+      default: 0,
+    },
     signupAt: {
       type: Date,
       default: Date.now,

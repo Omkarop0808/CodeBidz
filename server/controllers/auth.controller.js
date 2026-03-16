@@ -93,7 +93,6 @@ export const handleUserSignup = async (req, res) => {
       name,
       email,
       password: hashedPassword,
-      avatar: "https://avatar.iran.liara.run/public/7",
       ipAddress: ip,
       userAgent,
       location,

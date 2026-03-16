@@ -98,6 +98,10 @@ export const AdminDashboard = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [assigning, setAssigning] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [creditValue, setCreditValue] = useState(0);
+  const { mutate: assignCredits, isLoading: assignLoading } = require("../../hooks/useAdmin").useAssignCredits();
 
   const fetchDashboardData = async () => {
     try {
@@ -258,21 +262,12 @@ export const AdminDashboard = () => {
                 <table className="min-w-full">
                   <thead>
                     <tr className="border-b border-gray-100">
-                      <th className="px-6 py-3.5 text-left text-[11px] font-semibold text-gray-400 uppercase tracking-wider">
-                        User
-                      </th>
-                      <th className="px-6 py-3.5 text-left text-[11px] font-semibold text-gray-400 uppercase tracking-wider">
-                        Role
-                      </th>
-                      <th className="px-6 py-3.5 text-left text-[11px] font-semibold text-gray-400 uppercase tracking-wider">
-                        Joined
-                      </th>
-                      <th className="px-6 py-3.5 text-left text-[11px] font-semibold text-gray-400 uppercase tracking-wider">
-                        Last Login
-                      </th>
-                      <th className="px-6 py-3.5 text-left text-[11px] font-semibold text-gray-400 uppercase tracking-wider">
-                        Status
-                      </th>
+                      <th className="px-6 py-3.5 text-left text-[11px] font-semibold text-gray-400 uppercase tracking-wider">User</th>
+                      <th className="px-6 py-3.5 text-left text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Role</th>
+                      <th className="px-6 py-3.5 text-left text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Joined</th>
+                      <th className="px-6 py-3.5 text-left text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Last Login</th>
+                      <th className="px-6 py-3.5 text-left text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Credits</th>
+                      <th className="px-6 py-3.5 text-left text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Status</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-50">
@@ -317,6 +312,17 @@ export const AdminDashboard = () => {
                             ? new Date(user.lastLogin).toLocaleDateString()
                             : "Never"}
                         </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          {typeof user.credits === "number" ? user.credits : 0}
+                          <button
+                            className="ml-2 text-xs bg-indigo-100 text-indigo-700 px-2 py-1 rounded hover:bg-indigo-200"
+                            onClick={() => {
+                              setSelectedUser(user);
+                              setCreditValue(user.credits || 0);
+                              setAssigning(true);
+                            }}
+                          >Assign</button>
+                        </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full">
                             <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full" />
@@ -325,6 +331,40 @@ export const AdminDashboard = () => {
                         </td>
                       </tr>
                     ))}
+                        {/* Assign Credits Dialog */}
+                        {assigning && selectedUser && (
+                          <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
+                            <div className="bg-white rounded-xl shadow-lg p-6 w-full max-w-md">
+                              <h3 className="text-lg font-semibold mb-4">Assign Credits to {selectedUser.name}</h3>
+                              <input
+                                type="number"
+                                min="0"
+                                value={creditValue}
+                                onChange={e => setCreditValue(Number(e.target.value))}
+                                className="w-full border border-gray-300 rounded px-3 py-2 mb-4"
+                              />
+                              <div className="flex justify-end gap-2">
+                                <button
+                                  className="bg-gray-200 px-4 py-2 rounded"
+                                  onClick={() => setAssigning(false)}
+                                  disabled={assignLoading}
+                                >Cancel</button>
+                                <button
+                                  className="bg-indigo-600 text-white px-4 py-2 rounded"
+                                  disabled={assignLoading}
+                                  onClick={() => {
+                                    assignCredits({ userId: selectedUser._id, credits: creditValue }, {
+                                      onSuccess: () => {
+                                        setAssigning(false);
+                                        setSelectedUser(null);
+                                      },
+                                    });
+                                  }}
+                                >{assignLoading ? "Assigning..." : "Assign Credits"}</button>
+                              </div>
+                            </div>
+                          </div>
+                        )}
                   </tbody>
                 </table>
               </div>
